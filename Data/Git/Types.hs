@@ -83,7 +83,7 @@ instance Time GitTime where
 
 instance Show GitTime where
     show (GitTime t tz) =
-        timePrint "EPOCH" t ++ " " ++ show tz
+        timePrint ("EPOCH" :: String) t ++ " " ++ show tz
 
 gitTime :: Integer -> Int -> GitTime
 gitTime seconds tzMins =
