@@ -134,10 +134,10 @@ packedObjectToObject (PackedObjectInfo { poiType = ty, poiExtra = extra }, objDa
 packObjectFromRaw :: HashAlgorithm hash
                   => (ObjectType, Maybe (ObjectPtr hash), L.ByteString)
                   -> Maybe (Object hash)
-packObjectFromRaw (TypeCommit, Nothing, objData) = P.maybeParseChunks objectParseCommit (L.toChunks objData)
-packObjectFromRaw (TypeTree, Nothing, objData)   = P.maybeParseChunks objectParseTree (L.toChunks objData)
-packObjectFromRaw (TypeBlob, Nothing, objData)   = P.maybeParseChunks objectParseBlob (L.toChunks objData)
-packObjectFromRaw (TypeTag, Nothing, objData)    = P.maybeParseChunks objectParseTag (L.toChunks objData)
+packObjectFromRaw (TypeCommit, Nothing, objData) = P.maybeParse objectParseCommit (L.toStrict objData)
+packObjectFromRaw (TypeTree, Nothing, objData)   = P.maybeParse objectParseTree   (L.toStrict objData)
+packObjectFromRaw (TypeBlob, Nothing, objData)   = P.maybeParse objectParseBlob   (L.toStrict objData)
+packObjectFromRaw (TypeTag, Nothing, objData)    = P.maybeParse objectParseTag    (L.toStrict objData)
 packObjectFromRaw (TypeDeltaOff, Just (PtrOfs o), objData) = toObject . DeltaOfs o <$> deltaRead (L.toChunks objData)
 packObjectFromRaw (TypeDeltaRef, Just (PtrRef r), objData) = toObject . DeltaRef r <$> deltaRead (L.toChunks objData)
 packObjectFromRaw _                              = error "can't happen unless someone change getNextObjectRaw"
